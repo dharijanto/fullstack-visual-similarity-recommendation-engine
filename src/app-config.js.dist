@@ -46,6 +46,7 @@ module.exports = {
   BASE_URL: 'http://ntech.nusantara-local.com',
   IMAGE_PATH: path.join(__dirname, '../images/'),
   IMAGE_MOUNT_PATH: '/images/',
+  SIMILARITY_MATRIX_PATH: path.join(__dirname, '../lane-crawford-similarity-matrix.json'),
   THUMBNAIL_IMAGE_MOUNT_PATH: '/thumbnail-images/',
   GENERATED_PRINT_PDF_PATH: path.join(__dirname, '../gen-pdf/'),
   GENERATED_CLOUD_SYNC_DATA: path.join(__dirname, '../gen-cloud-sync-data'),
