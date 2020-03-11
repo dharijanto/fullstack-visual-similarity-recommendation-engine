@@ -1,0 +1,128 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(href='/assets/vendor/lumino-template/css/bootstrap.min.css', rel='stylesheet')
+    link(href='/assets/vendor/lumino-template/css/font-awesome.min.css', rel='stylesheet')
+    // link(href='/assets/vendor/lumino-template/css/datepicker3.css', rel='stylesheet')
+    link(rel="stylesheet" type="text/css" href=`/assets/vendor/toastr/toastr.css`)
+    link(href='/assets/css/cms.css', rel='stylesheet')
+
+    //NC Input Library
+    link(rel="stylesheet" type="text/css" href=`/assets/vendor/datatables/datatables.min.css`)
+    link(rel="stylesheet" type="text/css" href=`/assets/vendor/datatables/responsive.bootstrap.min.css`)
+    link(rel="stylesheet" type="text/css" href=`/assets/css/nprogress.css`)
+    link(rel="stylesheet" type="text/css" href=`/assets/css/nc-input-library.css`)
+    link(rel="stylesheet" type="text/css" href=`/assets/vendor/select2/select2.css`)
+    block head
+      title Nusantara Gizmo - Dashboard
+  body
+    nav.navbar.navbar-custom.navbar-fixed-top(role='navigation')
+      .container-fluid
+        .navbar-header
+          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#sidebar-collapse')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='#')
+            span Nusantara
+            |  Gizmo
+          ul.nav.navbar-top-links.navbar-right
+            li.dropdown
+              a.dropdown-toggle.count-info(data-toggle='dropdown', href='#')
+                em.fa.fa-envelope
+                span.label.label-danger
+                  // 15
+              ul.dropdown-menu.dropdown-messages
+                //
+                  <li>
+                  <div class="dropdown-messages-box"><a href="profile.html" class="pull-left">
+                  <img alt="image" class="img-circle" src="http://placehold.it/40/30a5ff/fff">
+                  </a>
+                  <div class="message-body"><small class="pull-right">3 mins ago</small>
+                  <a href="#"><strong>John Doe</strong> commented on <strong>your photo</strong>.</a>
+                  <br /><small class="text-muted">1:24 pm - 25/03/2015</small></div>
+                  </div>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                  <div class="dropdown-messages-box"><a href="profile.html" class="pull-left">
+                  <img alt="image" class="img-circle" src="http://placehold.it/40/30a5ff/fff">
+                  </a>
+                  <div class="message-body"><small class="pull-right">1 hour ago</small>
+                  <a href="#">New message from <strong>Jane Doe</strong>.</a>
+                  <br /><small class="text-muted">12:27 pm - 25/03/2015</small></div>
+                  </div>
+                  </li>
+                  <li class="divider"></li>
+                li
+                  .all-button
+                    a(href='#')
+                      em.fa.fa-inbox
+                      strong All Messages
+            li.dropdown
+              a.dropdown-toggle.count-info(data-toggle='dropdown', href='#')
+                em.fa.fa-bell
+                span.label.label-info
+                  // 5
+              ul.dropdown-menu.dropdown-alerts
+                //
+                  <li><a href="#">
+                  <div><em class="fa fa-envelope"></em> 1 New Message
+                  <span class="pull-right text-muted small">3 mins ago</span></div>
+                  </a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">
+                  <div><em class="fa fa-heart"></em> 12 New Likes
+                  <span class="pull-right text-muted small">4 mins ago</span></div>
+                  </a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">
+                  <div><em class="fa fa-user"></em> 5 New Followers
+                  <span class="pull-right text-muted small">4 mins ago</span></div>
+                  </a></li>
+      // /.container-fluid
+    #sidebar-collapse.col-sm-3.col-lg-2.sidebar
+      if user
+        .profile-sidebar
+          .profile-userpic
+            img.img-responsive(src='/assets/images/placeholder-90x90.png', alt='')
+          .profile-usertitle
+            .profile-usertitle-name= user.fullName
+            .profile-usertitle-status
+              span.indicator.label-success
+              | Online
+          .clear
+      .divider
+      ul.nav.menu
+        if user
+          each menu in sidebar || []
+            if 'children' in menu
+              li.parent
+                a(data-toggle='collapse' href=`#${menu.id}`)
+                  em.fa.fa-navicon
+                  |  #{menu.title}
+                  span.icon.pull-right(data-toggle='collapse' href=`#${menu.id}`)
+                    em.fa.fa-plus
+                ul.children.collapse(id=`${menu.id}`)
+                  each child in menu.children
+                    li
+                      a(href=`${child.href}`)
+                        span.fa(class=`${child.faIcon || 'fa-arrow-right'}`)
+                        |  #{child.title}
+            else
+              li
+                a(href=`${menu.href}`)
+                  em.fa(class=`${menu.faIcon || ''}`)
+                  |  #{menu.title}
+    // /.sidebar
+    .col-sm-9.col-sm-offset-3.col-lg-10.col-lg-offset-2.main
+      block content
+    // /.main
+    script(src="/assets/js/jquery.min.js")
+    // script(src='/assets/vendor/lumino-template/js/jquery-1.11.1.min.js')
+    script(src='/assets/vendor/lumino-template/js/bootstrap.min.js')
+    script(src='/assets/vendor/lumino-template/js/custom.js')
+    block scripts
