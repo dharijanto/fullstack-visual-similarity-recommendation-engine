@@ -32,6 +32,7 @@
     "bluebird-retry": "^0.11.0",
     "flatToTrees": "^0.1.2",
     "html-to-text": "^5.1.1",
+    "lodash": "^4.17.15",
     "mime": "^2.4.0",
     "node-xlsx": "^0.15.0",
     "passport": "^0.4.0",

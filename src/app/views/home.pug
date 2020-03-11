@@ -1,22 +1,71 @@
 head
   link(href="/assets/vendor/bootstrap/bootstrap.min.css" rel="stylesheet")
+  link(href="/assets/css/main.css" rel="stylesheet")
   style.
     img.fashion {
       margin: 20px;
     }
     
 body
-  h1 Hello
-  .row
-    for file in sortedFiles
-      .col-lg-2.col-md-3
-        img.fashion(src='/images/lanecrawford/' + file)
-
+  .container.bootstrap.snipets
+    h1.text-center.text-muted Visually-Similar Product Recommendation for Lane Crawford
+    .row
+      .col-md-12
+        nav(aria-label='Page navigation example')
+          ul.pagination
+            for page in pages
+              li.page-item
+                a.page-link(href=`/${page}`)= page
+    .row.flow-offset-1
+      for file in sortedFiles
+        .col-xs-6.col-md-4
+          .product.tumbnail.thumbnail-3
+            a(data-toggle="modal" href="#myModal")
+              img.fashion(src='/images/lanecrawford/' + file)
+            .caption
+              //h6
+                a(href='#') Short Sleeve T-Shirt
+              //span.price
+                del $24.99
+              //span.price.sale $12.49
+  #myModal.modal.fade(role='dialog')
+    .modal-dialog
+      // Modal content
+      .modal-content
+        .modal-header
+          h4.modal-title Similar Products
+        .modal-body
+          p#modal-body Loading...
 
   script(src='/assets/js/jquery.min.js')
   script(src='/assets/vendor/bootstrap/popper.min.js')
   script(src='/assets/vendor/bootstrap/bootstrap.min.js')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js')
   script.
+    function setText(text) {
+      $('#modal-body').text(text)
+    }
+    function setElement(element) {
+      $('#modal-body').empty()
+      $('#modal-body').append(element)
+    }
     $('img.fashion').on('click', function (element) {
-      console.log($(element)[0].attr('src'))
+      setText('Loading...')
+      let filepath = $(this).attr('src').split('/')
+      let filename = filepath[filepath.length - 1]
+      axios.get('/visually-similar/' + filename).then(rawResp => {
+        const resp = rawResp.data
+        if (resp.status) {
+          const data = resp.data
+          const row = $('<div class="row">')
+          data.forEach(function (filename) {
+            const col = $(`<div class="col-md-4"><img class="img-fluid" src="/images/lanecrawford/${filename}"> </div>`)
+            row.append(col)
+          })
+          setElement(row)
+        } else {
+          setText(resp.errMessage)
+        }
+        
+      })
     })
