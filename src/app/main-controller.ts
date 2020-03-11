@@ -1,3 +1,5 @@
+import * as fs from 'fs'
+
 import * as express from 'express'
 import * as Promise from 'bluebird'
 import * as sharp from 'sharp'
@@ -23,9 +25,27 @@ class Controller extends BaseController {
 
     // Full resolution images
     this.routeUse(AppConfig.IMAGE_MOUNT_PATH, express.static(AppConfig.IMAGE_PATH, { maxAge: AppConfig.ENABLE_MAX_AGE_CACHING ? '1h' : '0' }))
-    this.routeGet('/', (req, res, next) => {
-      res.send('Hello world!')
+
+    // Iterate through all images
+    fs.readdir(path.join(AppConfig.IMAGE_PATH, 'lanecrawford'), (err, files) => {
+      const sortedFiles = files.sort()
+      const fileMap = sortedFiles.reduce((acc, value, index) => {
+        acc[value] = index
+        return acc
+      }, {})
+
+      if (err) {
+        this.routeGet('*', (req, res, next) => {
+          res.status(500).send('Failed to load assets: ' + err.message)
+        })
+      } else {
+        this.routeGet('/', (req, res, next) => {
+          res.locals.sortedFiles = sortedFiles.slice(0,100)
+          res.render('home')
+        })
+      }
     })
+
   }
 }
 
